@@ -5,8 +5,8 @@ let path = require('path');
 let autoprefixer = require('autoprefixer');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
-
 let extractStyles = new ExtractTextPlugin('[name].css')
+var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 
 let config = {
   stats: {
@@ -34,7 +34,7 @@ let config = {
     rules: [
       {
         test: /\.pug$/,
-        loader: ['html-loader', 'pug-html-loader?pretty&exports=false']
+        loader: ['html-loader', 'pug-html-loader?pretty&exports=false&doctype=html']
       },
       {
         test: /\.scss$/,
@@ -45,10 +45,13 @@ let config = {
               loader: 'css-loader'
             },
             {
+              loader: 'postcss-loader'
+            },
+            {
               loader: 'sass-loader'
             }
           ],
-  })
+        })
       }
     ]
   },
@@ -73,7 +76,8 @@ let config = {
       title: 'poh',
       template: 'templates/index.pug'
     }),
-    extractStyles,
+    new HtmlWebpackIncludeAssetsPlugin({ assets: [], append: true }),
+    extractStyles
   ]
 }
 
