@@ -5,8 +5,8 @@ let path = require('path');
 let autoprefixer = require('autoprefixer');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
-let extractStyles = new ExtractTextPlugin('[name].css')
-var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+let extractStyles = new ExtractTextPlugin('assets/styles/[name].css');
+let HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 
 let config = {
   stats: {
@@ -20,10 +20,11 @@ let config = {
   },
   entry: {
     index: [
-      path.resolve(__dirname, 'templates/index.pug')
-    ],
-    'css/application': [
+      path.resolve(__dirname, 'templates/index.pug'),
       path.resolve(__dirname, 'assets/styles/application.scss')
+    ],
+    main: [
+      path.resolve(__dirname, 'assets/styles/styles.scss')
     ]
   },
   output: {
@@ -62,7 +63,7 @@ let config = {
       options: {
         postcss: [
           autoprefixer({
-            browsers: ['last 2 version', 'Explorer >= 10', 'Android >= 4']
+            browsers: ['last 2 version', 'Explorer >= 9', 'Android >= 4']
           })
         ],
         sassLoader: {
@@ -76,7 +77,7 @@ let config = {
       title: 'poh',
       template: 'templates/index.pug'
     }),
-    new HtmlWebpackIncludeAssetsPlugin({ assets: [], append: true }),
+    new HtmlWebpackIncludeAssetsPlugin({ publicPath: 'assets/styles/', assets: [], append: true }),
     extractStyles
   ]
 }
