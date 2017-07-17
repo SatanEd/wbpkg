@@ -7,6 +7,8 @@ let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let extractStyles = new ExtractTextPlugin('assets/styles/[name].css');
 let HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+let CleanWebpackPlugin = require('clean-webpack-plugin');
+let DashboardPlugin = require('webpack-dashboard/plugin');
 
 let config = {
   stats: {
@@ -21,15 +23,17 @@ let config = {
   entry: {
     index: [
       path.resolve(__dirname, 'templates/index.pug'),
-      path.resolve(__dirname, 'assets/styles/application.scss')
+      path.resolve(__dirname, 'assets/styles/application.scss'),
+      path.resolve(__dirname, 'templates/index.js')
     ],
     main: [
       path.resolve(__dirname, 'assets/styles/styles.scss')
     ]
   },
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: '[name].js'
+    path: path.resolve(__dirname, 'build/'),
+    filename: '[name].js',
+    chunkFilename: '[name].bundle.js'
   },
   module: {
     rules: [
@@ -57,6 +61,12 @@ let config = {
     ]
   },
   plugins: [
+    new DashboardPlugin({port: 3003}),
+    new CleanWebpackPlugin(['build'], {
+      root: path.resolve(__dirname),
+      verbose: true,
+      dry: false
+    }),
     new webpack.LoaderOptionsPlugin({
       minimize: false,
       debug: true,
@@ -73,11 +83,14 @@ let config = {
         }
       }
     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common'
+    }),
     new HtmlWebpackPlugin({
       title: 'poh',
       template: 'templates/index.pug'
     }),
-    new HtmlWebpackIncludeAssetsPlugin({ publicPath: 'assets/styles/', assets: [], append: true }),
+    new HtmlWebpackIncludeAssetsPlugin({ assets: ['0.bundle.js'], append: true }),
     extractStyles
   ]
 }
