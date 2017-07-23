@@ -61,7 +61,7 @@ let config = {
     ]
   },
   plugins: [
-    new DashboardPlugin({port: 3003}),
+    // new DashboardPlugin({port: 3003}),
     new CleanWebpackPlugin(['build'], {
       root: path.resolve(__dirname),
       verbose: true,
@@ -90,7 +90,7 @@ let config = {
       title: 'poh',
       template: 'templates/index.pug'
     }),
-    new HtmlWebpackIncludeAssetsPlugin({ assets: ['0.bundle.js'], append: true }),
+    // new HtmlWebpackIncludeAssetsPlugin({ assets: ['0.bundle.js'], append: true }),
     extractStyles
   ]
 }
